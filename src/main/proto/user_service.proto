@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_package = "cc.nekocc.aitextimage.grpc";
+option java_multiple_files = true;
+option java_outer_classname = "UserServiceProto";
+
+service UserService
+{
+  rpc Register(RegisterRequest)
+      returns (AuthResponse);
+  rpc Login(LoginRequest)
+      returns (AuthResponse);
+  rpc SaveSettings(SaveSettingsRequest)
+      returns (SettingsResponse);
+  rpc GetSettings(GetSettingsRequest)
+      returns (SettingsResponse);
+  rpc AddHistory(AddHistoryRequest)
+      returns (AddHistoryResponse);
+  rpc GetHistories(GetHistoriesRequest)
+      returns (HistoriesResponse);
+}
+
+message RegisterRequest
+{
+  string username = 1;
+  string password = 2;
+  string server_key = 3;
+}
+
+message LoginRequest
+{
+  string username = 1;
+  string password = 2;
+}
+
+message AuthResponse
+{
+  string token = 1;
+  string message = 2;
+  bool success = 3;
+}
+
+message SaveSettingsRequest
+{
+  string token = 1;
+  google.protobuf.StringValue json_settings = 2;
+}
+
+message GetSettingsRequest
+{
+  string token = 1;
+}
+
+message SettingsResponse
+{
+  google.protobuf.StringValue json_settings = 1;
+  string message = 2;
+  bool success = 3;
+}
+
+message HistoryRecord
+{
+  int64 id = 1;
+  string json_history = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message AddHistoryRequest
+{
+  string token = 1;
+  string json_history = 2;
+}
+
+message AddHistoryResponse
+{
+  bool success = 1;
+  string message = 2;
+  HistoryRecord created_history = 3;
+}
+
+message GetHistoriesRequest
+{
+  string token = 1;
+}
+
+message HistoriesResponse
+{
+  repeated HistoryRecord histories = 1;
+  bool success = 2;
+  string message = 3;
+}
